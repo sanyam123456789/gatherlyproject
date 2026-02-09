@@ -8,7 +8,8 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
+import UsernamePicker from '@/components/UsernamePicker';
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ const Signup = () => {
   });
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showUsernamePicker, setShowUsernamePicker] = useState(false);
 
   // Generate cute username on component mount
   useEffect(() => {
@@ -76,15 +78,15 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-sky-light to-cyan-light p-4">
-      <Card className="w-full max-w-md bg-white/90 backdrop-blur-sm shadow-xl">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-arctic-deepest via-arctic-deep to-arctic-mid p-4">
+      <Card className="w-full max-w-md bg-arctic-deep/90 backdrop-blur-md shadow-2xl border border-aurora-cyan/30">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Create Account</CardTitle>
-          <CardDescription>Join Gatherly and start connecting</CardDescription>
+          <CardTitle className="text-3xl font-display font-bold text-ice-white">Create Account</CardTitle>
+          <CardDescription className="text-ice-gray font-body">Join Gatherly and start connecting 🐧</CardDescription>
         </CardHeader>
         <CardContent>
           {error && (
-            <Alert variant="destructive" className="mb-4">
+            <Alert className="mb-4 bg-aurora-pink/10 border-aurora-pink/30 text-ice-white">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
@@ -122,7 +124,7 @@ const Signup = () => {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="username" className="text-ice-white">Username</Label>
               <Input
                 id="username"
                 name="username"
@@ -132,11 +134,34 @@ const Signup = () => {
                 onChange={handleChange}
                 required
                 minLength={3}
+                className="bg-arctic-mid border-ice-dark/30 text-ice-white placeholder:text-ice-dark font-mono"
               />
+
+              {/* Username Picker Toggle */}
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => setShowUsernamePicker(!showUsernamePicker)}
+                className="w-full border-aurora-cyan/30 hover:border-aurora-cyan hover:bg-aurora-cyan/10 text-aurora-cyan"
+              >
+                <Sparkles className="w-4 h-4 mr-2" />
+                Generate Cool Username
+                {showUsernamePicker ? <ChevronUp className="w-4 h-4 ml-auto" /> : <ChevronDown className="w-4 h-4 ml-auto" />}
+              </Button>
+
+              {showUsernamePicker && (
+                <UsernamePicker
+                  currentUsername={formData.username}
+                  onSelect={(username) => {
+                    setFormData({ ...formData, username });
+                  }}
+                />
+              )}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="email" className="text-ice-white">Email</Label>
               <Input
                 id="email"
                 name="email"
@@ -145,11 +170,12 @@ const Signup = () => {
                 value={formData.email}
                 onChange={handleChange}
                 required
+                className="bg-arctic-mid border-ice-dark/30 text-ice-white placeholder:text-ice-dark"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password" className="text-ice-white">Password</Label>
               <Input
                 id="password"
                 name="password"
@@ -159,11 +185,12 @@ const Signup = () => {
                 onChange={handleChange}
                 required
                 minLength={6}
+                className="bg-arctic-mid border-ice-dark/30 text-ice-white placeholder:text-ice-dark"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="confirmPassword">Confirm Password</Label>
+              <Label htmlFor="confirmPassword" className="text-ice-white">Confirm Password</Label>
               <Input
                 id="confirmPassword"
                 name="confirmPassword"
@@ -172,21 +199,22 @@ const Signup = () => {
                 value={formData.confirmPassword}
                 onChange={handleChange}
                 required
+                className="bg-arctic-mid border-ice-dark/30 text-ice-white placeholder:text-ice-dark"
               />
             </div>
 
             <Button
               type="submit"
-              className="w-full"
+              className="w-full bg-gradient-to-r from-aurora-cyan to-aurora-purple hover:shadow-lg hover:shadow-aurora-cyan/50 text-white font-semibold"
               disabled={isLoading}
             >
               {isLoading ? 'Creating Account...' : 'Sign Up'}
             </Button>
           </form>
 
-          <p className="mt-4 text-center text-sm text-gray-600">
+          <p className="mt-4 text-center text-sm text-ice-gray">
             Already have an account?{' '}
-            <Link to="/login" className="text-blue-600 hover:underline">
+            <Link to="/login" className="text-aurora-cyan hover:text-aurora-purple hover:underline font-semibold">
               Log in
             </Link>
           </p>

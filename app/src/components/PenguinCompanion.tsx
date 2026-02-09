@@ -5,39 +5,12 @@ import { useAuthStore } from '@/store/authStore';
 const PenguinCompanion = () => {
     const { penguinEnabled } = useSettingsStore();
     const { user } = useAuthStore();
-    const [position, setPosition] = useState({ x: 100, y: 100 });
-    const [targetPosition, setTargetPosition] = useState({ x: 100, y: 100 });
     const [isWaving, setIsWaving] = useState(false);
 
     // Check if penguin should be shown
     const shouldShow = penguinEnabled && user?.penguinEnabled !== false;
 
-    useEffect(() => {
-        if (!shouldShow) return;
-
-        const handleMouseMove = (e: MouseEvent) => {
-            setTargetPosition({ x: e.clientX - 25, y: e.clientY - 25 });
-        };
-
-        window.addEventListener('mousemove', handleMouseMove);
-        return () => window.removeEventListener('mousemove', handleMouseMove);
-    }, [shouldShow]);
-
-    // Smooth movement animation
-    useEffect(() => {
-        if (!shouldShow) return;
-
-        const interval = setInterval(() => {
-            setPosition((prev) => ({
-                x: prev.x + (targetPosition.x - prev.x) * 0.1,
-                y: prev.y + (targetPosition.y - prev.y) * 0.1,
-            }));
-        }, 16); // ~60fps
-
-        return () => clearInterval(interval);
-    }, [targetPosition, shouldShow]);
-
-    // Random wave animation
+    // Random wave animation - NO CURSOR TRACKING!
     useEffect(() => {
         if (!shouldShow) return;
 
@@ -53,13 +26,9 @@ const PenguinCompanion = () => {
 
     return (
         <div
-            className="fixed pointer-events-none z-50 transition-transform duration-100"
-            style={{
-                left: `${position.x}px`,
-                top: `${position.y}px`,
-            }}
+            className="fixed bottom-4 right-4 z-50 pointer-events-none"
         >
-            <div className={`relative ${isWaving ? 'animate-penguin-wave' : ''}`}>
+            <div className={`relative transition-transform duration-300 ${isWaving ? 'animate-penguin-wave' : ''}`}>
                 {/* Cute Penguin SVG */}
                 <svg
                     width="50"

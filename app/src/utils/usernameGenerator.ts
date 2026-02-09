@@ -1,33 +1,60 @@
-// Cute username generator (frontend version)
+// Arctic Night themed username generator for Gatherly
+// Generates cool, adventurous usernames matching the app's vibe
+
 const adjectives = [
-    'Fluffy', 'Cozy', 'Happy', 'Cheerful', 'Bouncy', 'Sunny', 'Dreamy',
-    'Sparkly', 'Gentle', 'Peaceful', 'Jolly', 'Merry', 'Sweet', 'Lovely',
-    'Bright', 'Shiny', 'Playful', 'Friendly', 'Warm', 'Soft', 'Snowy',
-    'Arctic', 'Frosty', 'Icy', 'Chilly', 'Cool', 'Breezy', 'Misty'
+    'Arctic', 'Cosmic', 'Neon', 'Frosty', 'Chill', 'Zen', 'Vibe',
+    'Mystic', 'Luna', 'Solar', 'Aqua', 'Ember', 'Cloud', 'Storm',
+    'Galaxy', 'Pixel', 'Echo', 'Nova', 'Velvet', 'Crystal',
+    'Midnight', 'Dawn', 'Twilight', 'Starry', 'Glowing', 'Aurora',
+    'Cyber', 'Digital', 'Quantum', 'Stellar'
 ];
 
 const nouns = [
-    'Penguin', 'Panda', 'Koala', 'Otter', 'Bunny', 'Kitty', 'Puppy',
-    'Fox', 'Bear', 'Owl', 'Deer', 'Seal', 'Dolphin', 'Hedgehog',
-    'Squirrel', 'Raccoon', 'Wombat', 'Narwhal', 'Whale', 'Cloud',
-    'Star', 'Moon', 'Sunset', 'Rainbow', 'Breeze', 'Wave', 'River',
-    'Waddler', 'Buddy', 'Friend', 'Pal', 'Mate', 'Chum', 'Explorer'
+    'Explorer', 'Wanderer', 'Seeker', 'Dreamer', 'Penguin', 'Traveler',
+    'Adventurer', 'Nomad', 'Voyager', 'Scout', 'Pioneer', 'Drifter',
+    'Roamer', 'Navigator', 'Pathfinder', 'Wayfarer', 'Trekker', 'Globetrotter',
+    'Vibe', 'Spirit', 'Soul', 'Ghost', 'Phantom', 'Shadow'
 ];
 
-export function generateCuteUsername(): string {
-    const adjective = adjectives[Math.floor(Math.random() * adjectives.length)];
-    const noun = nouns[Math.floor(Math.random() * nouns.length)];
-    const number = Math.floor(Math.random() * 999) + 1;
+const suffixes = ['_', '247', '88', '99', '42', 'X', 'Pro', 'Zen', '777', '101', 'XD'];
 
-    return `${adjective}${noun}${number}`;
+/**
+ * Generate a single random username
+ * Format: {Adjective}{Noun}{Suffix}
+ * Example: ArcticExplorer247, FrostyPenguin88, CosmicWanderer_
+ */
+export function generateCuteUsername(): string {
+    const adj = adjectives[Math.floor(Math.random() * adjectives.length)];
+    const noun = nouns[Math.floor(Math.random() * nouns.length)];
+    const suffix = suffixes[Math.floor(Math.random() * suffixes.length)];
+    return `${adj}${noun}${suffix}`;
 }
 
-export function generateUsernameOptions(count: number = 3): string[] {
-    const usernames = new Set<string>();
+/**
+ * Generate a batch of unique usernames
+ * @param count - Number of usernames to generate (default: 5)
+ * @returns Array of unique username strings
+ */
+export function generateUsernameOptions(count = 5): string[] {
+    const batch = new Set<string>();
+    let attempts = 0;
+    const maxAttempts = count * 10; // Prevent infinite loop
 
-    while (usernames.size < count) {
-        usernames.add(generateCuteUsername());
+    while (batch.size < count && attempts < maxAttempts) {
+        batch.add(generateCuteUsername());
+        attempts++;
     }
 
-    return Array.from(usernames);
+    return Array.from(batch);
+}
+
+/**
+ * Check if a username matches the generated pattern
+ * Useful for validation or analytics
+ */
+export function isGeneratedUsername(username: string): boolean {
+    const pattern = new RegExp(
+        `^(${adjectives.join('|')})(${nouns.join('|')})(${suffixes.join('|')})$`
+    );
+    return pattern.test(username);
 }

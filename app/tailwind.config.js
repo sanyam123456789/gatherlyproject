@@ -10,15 +10,32 @@ module.exports = {
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
-        // Soft pastel colors for enhanced UI
-        pastel: {
-          pink: '#FFB3BA',
-          peach: '#FFDFBA',
-          yellow: '#FFFFBA',
-          mint: '#BAFFC9',
-          sky: '#BAE1FF',
-          lavender: '#E0BBE4',
-          lilac: '#D4A5A5',
+        // Arctic Night Base Colors
+        arctic: {
+          deepest: '#0A1628',
+          deep: '#142740',
+          mid: '#1E3A5F',
+          light: '#2E5077',
+        },
+        // Aurora Accents (Penguin Magic)
+        aurora: {
+          cyan: '#00E5FF',
+          purple: '#B388FF',
+          pink: '#FF6EC7',
+          green: '#64FFDA',
+        },
+        // Ice Tones (Neutral)
+        ice: {
+          white: '#F8FBFF',
+          gray: '#E1EAF4',
+          dark: '#8B9BAC',
+          darker: '#4A5568',
+        },
+        // Event Category Glows
+        vibe: {
+          concert: '#FF6B9D',
+          travel: '#4ECDC4',
+          trek: '#FFB84D',
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -59,6 +76,12 @@ module.exports = {
           ring: "hsl(var(--sidebar-ring))",
         },
       },
+      fontFamily: {
+        display: ['Outfit', 'sans-serif'],
+        body: ['Inter', 'sans-serif'],
+        mono: ['JetBrains Mono', 'monospace'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",
         lg: "var(--radius)",
@@ -95,6 +118,18 @@ module.exports = {
           "0%": { opacity: "0", transform: "translateY(10px)" },
           "100%": { opacity: "1", transform: "translateY(0)" },
         },
+        "shimmer": {
+          "0%": { backgroundPosition: "-1000px 0" },
+          "100%": { backgroundPosition: "1000px 0" },
+        },
+        "glow-pulse": {
+          "0%, 100%": { boxShadow: "0 0 5px currentColor, 0 0 10px currentColor" },
+          "50%": { boxShadow: "0 0 10px currentColor, 0 0 20px currentColor, 0 0 30px currentColor" },
+        },
+        "slide-up": {
+          "0%": { opacity: "0", transform: "translateY(20px)" },
+          "100%": { opacity: "1", transform: "translateY(0)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -103,6 +138,9 @@ module.exports = {
         "penguin-hop": "penguin-hop 1s ease-in-out infinite",
         "penguin-wave": "penguin-wave 2s ease-in-out infinite",
         "fade-in-up": "fade-in-up 0.4s ease-out",
+        "shimmer": "shimmer 2s linear infinite",
+        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+        "slide-up": "slide-up 0.3s ease-out",
       },
     },
   },
