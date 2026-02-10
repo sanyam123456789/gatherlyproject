@@ -5,8 +5,8 @@ import { authApi } from '@/api/auth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import AuthLayout from '@/components/AuthLayout';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -46,64 +46,61 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
-          <CardDescription>Log in to your Gatherly account</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {error && (
-            <Alert variant="destructive" className="mb-4">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
+    <AuthLayout
+      title="Welcome Back"
+      description="Log in to your Gatherly account 🐧"
+    >
+      {error && (
+        <Alert className="mb-4 bg-aurora-pink/10 border-aurora-pink/30">
+          <AlertDescription className="text-ice-white">{error}</AlertDescription>
+        </Alert>
+      )}
 
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="Enter your email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-            </div>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <div className="space-y-2">
+          <Label htmlFor="email" className="text-ice-white">Email</Label>
+          <Input
+            id="email"
+            name="email"
+            type="email"
+            placeholder="Enter your email"
+            value={formData.email}
+            onChange={handleChange}
+            required
+            className="bg-arctic-mid border-ice-dark/30 text-ice-white placeholder:text-ice-dark"
+          />
+        </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                placeholder="Enter your password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-            </div>
+        <div className="space-y-2">
+          <Label htmlFor="password" className="text-ice-white">Password</Label>
+          <Input
+            id="password"
+            name="password"
+            type="password"
+            placeholder="Enter your password"
+            value={formData.password}
+            onChange={handleChange}
+            required
+            className="bg-arctic-mid border-ice-dark/30 text-ice-white placeholder:text-ice-dark"
+          />
+        </div>
 
-            <Button
-              type="submit"
-              className="w-full"
-              disabled={isLoading}
-            >
-              {isLoading ? 'Logging in...' : 'Log In'}
-            </Button>
-          </form>
+        <Button
+          type="submit"
+          className="w-full bg-gradient-to-r from-aurora-cyan to-aurora-purple hover:shadow-lg hover:shadow-aurora-cyan/50 text-white font-semibold"
+          disabled={isLoading}
+        >
+          {isLoading ? 'Logging in...' : 'Log In'}
+        </Button>
+      </form>
 
-          <p className="mt-4 text-center text-sm text-gray-600">
-            Don't have an account?{' '}
-            <Link to="/signup" className="text-blue-600 hover:underline">
-              Sign up
-            </Link>
-          </p>
-        </CardContent>
-      </Card>
-    </div>
+      <p className="mt-4 text-center text-sm text-ice-gray">
+        Don't have an account?{' '}
+        <Link to="/signup" className="text-aurora-cyan hover:text-aurora-purple hover:underline font-semibold">
+          Sign up
+        </Link>
+      </p>
+    </AuthLayout>
   );
 };
 

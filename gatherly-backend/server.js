@@ -6,6 +6,7 @@ require('dotenv').config();
 
 const connectDB = require('./config/db');
 const { authRoutes, eventRoutes, blogRoutes, profileRoutes } = require('./routes');
+const afterglowRoutes = require('./routes/afterglow');
 const { generateMockEvent } = require('./utils/mockEventGenerator');
 
 // Initialize Express app
@@ -43,6 +44,7 @@ if (process.env.NODE_ENV === 'development') {
 app.use('/api/auth', authRoutes);
 app.use('/api/events', eventRoutes);
 app.use('/api/blogs', blogRoutes);
+app.use('/api/afterglows', afterglowRoutes);
 app.use('/api/profile', profileRoutes);
 
 // Health check endpoint

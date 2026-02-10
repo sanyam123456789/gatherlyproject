@@ -199,9 +199,9 @@ const Events = () => {
               <UserCircle className="w-4 h-4 mr-2" />
               Profile
             </Button>
-            <Button variant="outline" size="sm" onClick={() => navigate('/blogs')} className="border-aurora-purple/30 hover:border-aurora-purple hover:bg-aurora-purple/10 text-ice-white">
+            <Button variant="outline" size="sm" onClick={() => navigate('/afterglow')} className="border-aurora-purple/30 hover:border-aurora-purple hover:bg-aurora-purple/10 text-ice-white">
               <BookOpen className="w-4 h-4 mr-2" />
-              Blogs
+              Afterglow
             </Button>
             <SettingsDialog />
             <Button variant="outline" onClick={handleLogout} size="sm" className="border-aurora-pink/30 hover:border-aurora-pink hover:bg-aurora-pink/10 text-ice-white">
@@ -507,8 +507,8 @@ const Events = () => {
 
         {/* Navigation Links */}
         <div className="mt-8 flex justify-center gap-4">
-          <Button variant="outline" onClick={() => navigate('/blogs')}>
-            View Blogs
+          <Button variant="outline" onClick={() => navigate('/afterglow')}>
+            View Afterglow
           </Button>
         </div>
       </div>

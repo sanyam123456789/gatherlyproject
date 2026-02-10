@@ -1,0 +1,10 @@
+Testing S3 upload...
+Bucket: gatherly-afterglow-sanyam
+Region: ap-south-1
+
+SUCCESS!
+URL: https://gatherly-afterglow-sanyam.s3.ap-south-1.amazonaws.com/test/hello.txt
+
+Test passed! S3 is configured correctly.
+
+STATUS: PASS

@@ -7,7 +7,7 @@ import Signup from '@/pages/Signup';
 import Login from '@/pages/Login';
 import Events from '@/pages/Events';
 import EventChat from '@/pages/EventChat';
-import Blogs from '@/pages/Blogs';
+import Afterglow from '@/pages/Afterglow';
 import Profile from '@/pages/Profile';
 import PenguinCompanion from '@/components/PenguinCompanion';
 import ErrorBoundary from '@/components/ErrorBoundary';
@@ -47,10 +47,10 @@ function App() {
             }
           />
           <Route
-            path="/blogs"
+            path="/afterglow"
             element={
               <ProtectedRoute>
-                <Blogs />
+                <Afterglow />
               </ProtectedRoute>
             }
           />

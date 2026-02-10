@@ -16,11 +16,51 @@ const signup = async (req, res) => {
   try {
     const { username, email, password, displayName } = req.body;
 
-    // Check if user already exists
-    const existingUser = await User.findOne({ $or: [{ email }, { username }] });
-    if (existingUser) {
+    console.log('📝 Signup attempt:', { username, email, hasPassword: !!password, displayName });
+
+    // Input validation
+    if (!username || !email || !password) {
       return res.status(400).json({
-        message: 'User already exists with this email or username'
+        message: 'Missing required fields',
+        details: {
+          username: !username ? 'Username is required' : null,
+          email: !email ? 'Email is required' : null,
+          password: !password ? 'Password is required' : null
+        }
+      });
+    }
+
+    if (password.length < 6) {
+      return res.status(400).json({
+        message: 'Password must be at least 6 characters',
+        field: 'password'
+      });
+    }
+
+    if (username.length < 3 || username.length > 30) {
+      return res.status(400).json({
+        message: 'Username must be between 3 and 30 characters',
+        field: 'username'
+      });
+    }
+
+    // Check for existing email
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+      console.log('❌ Signup failed: Email already exists');
+      return res.status(409).json({
+        message: 'Email already registered',
+        field: 'email'
+      });
+    }
+
+    // Check for existing username
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) {
+      console.log('❌ Signup failed: Username already taken');
+      return res.status(409).json({
+        message: 'Username already taken',
+        field: 'username'
       });
     }
 
@@ -39,6 +79,8 @@ const signup = async (req, res) => {
     // Generate token
     const token = generateToken(user._id);
 
+    console.log('✅ User created successfully:', user.username);
+
     res.status(201).json({
       message: 'User created successfully',
       token,
@@ -52,8 +94,31 @@ const signup = async (req, res) => {
       }
     });
   } catch (error) {
-    console.error('Signup error:', error);
-    res.status(500).json({ message: 'Server error', error: error.message });
+    console.error('❌ Signup error:', error);
+
+    // Mongoose validation errors
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(e => e.message);
+      return res.status(400).json({
+        message: 'Validation failed',
+        details: messages
+      });
+    }
+
+    // MongoDB duplicate key error
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyPattern)[0];
+      return res.status(409).json({
+        message: `${field.charAt(0).toUpperCase() + field.slice(1)} already exists`,
+        field
+      });
+    }
+
+    // Generic server error
+    res.status(500).json({
+      message: 'Server error',
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 };
 
@@ -113,8 +178,41 @@ const getMe = async (req, res) => {
   }
 };
 
+// @desc    Update user profile
+// @route   PUT /api/auth/profile
+// @access  Private
+const updateProfile = async (req, res) => {
+  try {
+    const { displayName } = req.body;
+
+    const user = await User.findById(req.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    user.displayName = displayName || null;
+    await user.save();
+
+    res.json({
+      message: 'Profile updated successfully',
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+        displayName: user.displayName,
+        avatar: user.avatar,
+        penguinEnabled: user.penguinEnabled
+      }
+    });
+  } catch (error) {
+    console.error('Update profile error:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
+
 module.exports = {
   signup,
   login,
-  getMe
+  getMe,
+  updateProfile
 };
