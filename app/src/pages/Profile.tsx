@@ -174,7 +174,7 @@ const Profile = () => {
                                                     className="bg-arctic-mid border-ice-dark/30 text-ice-white placeholder:text-ice-dark"
                                                 />
                                             </div>
-                                            <Button onClick={handleUpdateProfile} className="w-full bg-gradient-to-r from-aurora-cyan to-aurora-purple hover:shadow-lg">
+                                            <Button onClick={handleUpdateProfile} className="w-full">
                                                 Save Changes
                                             </Button>
                                         </div>

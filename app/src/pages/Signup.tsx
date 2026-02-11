@@ -107,10 +107,10 @@ const Signup = () => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Cute Display Name */}
-          <div className="space-y-2 p-3 bg-gradient-to-r from-blue-50 to-sky-light rounded-lg border border-blue-300">
+          <div className="space-y-2 p-3 bg-arctic-mid/30 rounded-lg border border-aurora-cyan/30">
             <div className="flex items-center justify-between">
-              <Label htmlFor="displayName" className="flex items-center gap-2">
-                <Sparkles className="w-4 h-4 text-blue-600" />
+              <Label htmlFor="displayName" className="flex items-center gap-2 text-ice-white">
+                <Sparkles className="w-4 h-4 text-aurora-cyan" />
                 Your Cute Display Name
               </Label>
               <Button
@@ -118,7 +118,7 @@ const Signup = () => {
                 variant="ghost"
                 size="sm"
                 onClick={regenerateDisplayName}
-                className="text-xs"
+                className="text-xs text-aurora-cyan hover:text-aurora-cyan/80 hover:bg-aurora-cyan/10"
               >
                 🔄 Regenerate
               </Button>
@@ -129,10 +129,10 @@ const Signup = () => {
               type="text"
               value={formData.displayName}
               onChange={handleChange}
-              className="bg-white/80"
+              className="bg-arctic-deep border-aurora-cyan/30 text-ice-white font-medium"
               required
             />
-            <p className="text-xs text-gray-500">
+            <p className="text-xs text-ice-gray">
               This will be your unique cute name! You can change it later.
             </p>
           </div>
@@ -219,7 +219,7 @@ const Signup = () => {
 
           <Button
             type="submit"
-            className="w-full bg-gradient-to-r from-aurora-cyan to-aurora-purple hover:shadow-lg hover:shadow-aurora-cyan/50 text-white font-semibold"
+            className="w-full font-semibold"
             disabled={isLoading}
           >
             {isLoading ? 'Creating Account...' : 'Sign Up'}

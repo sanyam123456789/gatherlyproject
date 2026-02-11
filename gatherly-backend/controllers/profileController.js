@@ -5,7 +5,8 @@ const Blog = require('../models/Blog');
 // Get user profile
 const getProfile = async (req, res) => {
     try {
-        const userId = req.params.userId || req.user.id;
+        const userId = req.params.userId || req.userId;
+        console.log('👤 Getting profile for userId:', userId);
 
         const user = await User.findById(userId).select('-password');
 
@@ -44,7 +45,7 @@ const getProfile = async (req, res) => {
 const updateProfile = async (req, res) => {
     try {
         const { displayName, avatar, penguinEnabled } = req.body;
-        const userId = req.user.id;
+        const userId = req.userId;
 
         const updateData = {};
 

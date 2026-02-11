@@ -7,6 +7,8 @@ const createEvent = async (req, res) => {
   try {
     const { title, description, date, location, maxAttendees, category } = req.body;
 
+    console.log('📝 Creating event:', { title, date: req.body.date, userId: req.userId });
+
     const event = await Event.create({
       title,
       description,

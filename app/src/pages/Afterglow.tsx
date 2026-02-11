@@ -345,7 +345,7 @@ const Afterglow = () => {
                             <DialogTrigger asChild>
                                 <Button
                                     onClick={() => handleOpenDialog()}
-                                    className="bg-gradient-to-r from-aurora-cyan to-aurora-purple hover:shadow-lg hover:shadow-aurora-cyan/50 transition-all duration-300"
+                                    className="transition-all duration-300 text-white"
                                 >
                                     <Plus className="w-4 h-4 mr-2" />
                                     Write Afterglow
@@ -462,7 +462,7 @@ const Afterglow = () => {
                         </p>
                         <Button
                             onClick={() => setDialogOpen(true)}
-                            className="bg-gradient-to-r from-aurora-cyan to-aurora-purple hover:shadow-lg hover:shadow-aurora-cyan/50"
+                            className="text-white"
                         >
                             <Plus className="w-4 h-4 mr-2" />
                             Write Your First Afterglow

@@ -10,8 +10,8 @@ interface AuthLayoutProps {
 
 export const AuthLayout = ({ title, description, children, showPenguin = true }: AuthLayoutProps) => {
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-arctic-deepest via-arctic-deep to-arctic-mid p-4">
-            <Card className="w-full max-w-md bg-arctic-deep/90 backdrop-blur-md shadow-2xl border border-aurora-cyan/30">
+        <div className="min-h-screen flex items-center justify-center bg-background p-4">
+            <Card className="w-full max-w-md bg-card/90 backdrop-blur-md shadow-2xl border border-primary/30">
                 <CardHeader className="text-center">
                     {showPenguin && (
                         <div className="text-6xl mb-4 animate-bounce">🐧</div>

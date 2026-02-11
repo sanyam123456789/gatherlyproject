@@ -49,4 +49,10 @@ const eventSchema = new mongoose.Schema({
   timestamps: true
 });
 
+// Add indexes for performance
+eventSchema.index({ location: 1 });
+eventSchema.index({ date: 1 });
+eventSchema.index({ category: 1 });
+eventSchema.index({ createAt: -1 });
+
 module.exports = mongoose.model('Event', eventSchema);

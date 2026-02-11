@@ -99,7 +99,13 @@ const Events = () => {
     setIsCreating(true);
 
     try {
-      await eventsApi.createEvent(formData);
+      // Ensure date is in ISO format
+      const payload = {
+        ...formData,
+        date: new Date(formData.date).toISOString()
+      };
+
+      const response: any = await eventsApi.createEvent(payload);
       setFormData({
         title: '',
         description: '',
@@ -109,7 +115,13 @@ const Events = () => {
         category: 'concert'
       });
       setDialogOpen(false);
-      fetchEvents();
+
+      // Redirect to event chat
+      if (response && response.event && response.event._id) {
+        navigate(`/events/${response.event._id}/chat`);
+      } else {
+        fetchEvents();
+      }
     } catch (err: any) {
       setError(err.response?.data?.message || 'Failed to create event');
     } finally {
@@ -225,15 +237,15 @@ const Events = () => {
             <h2 className="text-3xl font-display font-bold text-ice-white">Discover Events ✨</h2>
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-gradient-to-r from-aurora-cyan to-aurora-purple hover:shadow-lg hover:shadow-aurora-cyan/50 transition-all duration-300 text-white font-semibold">
+                <Button className="text-white font-semibold">
                   <Plus className="w-4 h-4 mr-2" />
                   Create Event
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-lg bg-arctic-deep border-aurora-cyan/30">
+              <DialogContent className="max-w-lg bg-arctic-deep border border-aurora-cyan/30 shadow-2xl shadow-aurora-cyan/10">
                 <DialogHeader>
                   <DialogTitle className="text-ice-white font-display text-2xl">Create New Event</DialogTitle>
-                  <DialogDescription className="text-ice-gray">Fill in the details to create a new event.</DialogDescription>
+                  <DialogDescription className="text-ice-gray">Fill in the details to create a new event. ✨</DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div className="space-y-2">
@@ -245,7 +257,7 @@ const Events = () => {
                       onChange={handleChange}
                       required
                       placeholder="Enter event title"
-                      className="bg-arctic-mid border-ice-dark/30 text-ice-white placeholder:text-ice-dark"
+                      className="bg-arctic-mid/50 border-aurora-cyan/30 text-ice-white placeholder:text-ice-dark focus:border-aurora-cyan focus:ring-aurora-cyan/20 backdrop-blur-sm"
                     />
                   </div>
                   <div className="space-y-2">
@@ -258,11 +270,11 @@ const Events = () => {
                       required
                       placeholder="Describe your event"
                       rows={3}
-                      className="bg-arctic-mid border-ice-dark/30 text-ice-white placeholder:text-ice-dark"
+                      className="bg-arctic-mid/50 border-aurora-cyan/30 text-ice-white placeholder:text-ice-dark focus:border-aurora-cyan focus:ring-aurora-cyan/20 backdrop-blur-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="date">Date & Time</Label>
+                    <Label htmlFor="date" className="text-ice-white">Date & Time</Label>
                     <Input
                       id="date"
                       name="date"
@@ -270,10 +282,11 @@ const Events = () => {
                       value={formData.date}
                       onChange={handleChange}
                       required
+                      className="bg-arctic-mid/50 border-aurora-cyan/30 text-ice-white placeholder:text-ice-dark focus:border-aurora-cyan focus:ring-aurora-cyan/20 backdrop-blur-sm [&::-webkit-calendar-picker-indicator]:invert"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="location">Location</Label>
+                    <Label htmlFor="location" className="text-ice-white">Location</Label>
                     <Input
                       id="location"
                       name="location"
@@ -281,10 +294,11 @@ const Events = () => {
                       onChange={handleChange}
                       required
                       placeholder="Event location"
+                      className="bg-arctic-mid/50 border-aurora-cyan/30 text-ice-white placeholder:text-ice-dark focus:border-aurora-cyan focus:ring-aurora-cyan/20 backdrop-blur-sm"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="maxAttendees">Max Attendees</Label>
+                    <Label htmlFor="maxAttendees" className="text-ice-white">Max Attendees</Label>
                     <Input
                       id="maxAttendees"
                       name="maxAttendees"
@@ -293,10 +307,20 @@ const Events = () => {
                       onChange={handleChange}
                       min={1}
                       max={1000}
+                      className="bg-arctic-mid/50 border-aurora-cyan/30 text-ice-white placeholder:text-ice-dark focus:border-aurora-cyan focus:ring-aurora-cyan/20 backdrop-blur-sm"
                     />
                   </div>
-                  <Button type="submit" className="w-full" disabled={isCreating}>
-                    {isCreating ? 'Creating...' : 'Create Event'}
+                  <Button
+                    type="submit"
+                    className="w-full bg-gradient-to-r from-aurora-cyan to-aurora-purple text-arctic-deepest font-bold hover:shadow-lg hover:shadow-aurora-cyan/20 transition-all hover:scale-[1.02] active:scale-[0.98]"
+                    disabled={isCreating}
+                  >
+                    {isCreating ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        Creating...
+                      </>
+                    ) : 'Create Event 🐧'}
                   </Button>
                 </form>
               </DialogContent>
@@ -422,22 +446,24 @@ const Events = () => {
                           <span>{event.attendees.length} / {event.maxAttendees} attendees</span>
                         </div>
                         <div className="text-xs text-ice-dark font-mono">
-                          Created by {event.creator.username}
+                          Created by {event.creator?.username || 'Unknown'}
                         </div>
                       </div>
 
                       {/* Attendee Avatars */}
-                      {event.attendees.length > 0 && (
+                      {event.attendees && event.attendees.length > 0 && (
                         <div className="flex items-center gap-2 mb-4 pb-3 border-b border-ice-dark/20">
                           <div className="flex -space-x-2">
                             {event.attendees.slice(0, 3).map((attendee, idx) => (
-                              <div
-                                key={attendee._id}
-                                className="w-8 h-8 rounded-full bg-gradient-to-br from-aurora-cyan to-aurora-purple border-2 border-arctic-deep flex items-center justify-center text-xs font-bold text-white"
-                                style={{ zIndex: 3 - idx }}
-                              >
-                                {attendee.username.charAt(0).toUpperCase()}
-                              </div>
+                              attendee ? (
+                                <div
+                                  key={attendee._id || idx}
+                                  className="w-8 h-8 rounded-full bg-gradient-to-br from-aurora-cyan to-aurora-purple border-2 border-arctic-deep flex items-center justify-center text-xs font-bold text-white"
+                                  style={{ zIndex: 3 - idx }}
+                                >
+                                  {attendee.username?.charAt(0).toUpperCase()}
+                                </div>
+                              ) : null
                             ))}
                             {event.attendees.length > 3 && (
                               <div className="w-8 h-8 rounded-full bg-ice-dark/30 border-2 border-arctic-deep flex items-center justify-center text-xs font-semibold text-ice-gray">
@@ -446,7 +472,7 @@ const Events = () => {
                             )}
                           </div>
                           <div className="text-xs text-ice-gray font-body">
-                            {event.attendees.slice(0, 2).map(a => a.username).join(', ')}
+                            {event.attendees.slice(0, 2).filter(Boolean).map(a => a.username).join(', ')}
                             {event.attendees.length > 2 && ` +${event.attendees.length - 2} more`}
                           </div>
                         </div>
@@ -457,7 +483,7 @@ const Events = () => {
                           <>
                             <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                               <Button
-                                className="w-full bg-gradient-to-r from-aurora-cyan to-aurora-purple hover:shadow-lg hover:shadow-aurora-cyan/50 text-white"
+                                className="w-full text-white"
                                 onClick={() => navigate(`/events/${event._id}/chat`)}
                               >
                                 <MessageCircle className="w-4 h-4 mr-2" />
@@ -483,7 +509,7 @@ const Events = () => {
                         ) : (
                           <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
                             <Button
-                              className="w-full bg-gradient-to-r from-aurora-green to-aurora-cyan hover:shadow-lg hover:shadow-aurora-green/50 text-white"
+                              className="w-full text-white"
                               onClick={() => handleJoinEvent(event._id)}
                               disabled={event.attendees.length >= event.maxAttendees || loadingStates[event._id]}
                             >

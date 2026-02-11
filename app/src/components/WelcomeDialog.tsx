@@ -1,4 +1,3 @@
-import React from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 
@@ -44,7 +43,7 @@ export const WelcomeDialog = ({ username, displayName, open, onClose }: WelcomeD
 
                 <Button
                     onClick={onClose}
-                    className="w-full bg-gradient-to-r from-aurora-cyan to-aurora-purple hover:shadow-lg hover:shadow-aurora-cyan/50 text-white font-semibold"
+                    className="w-full font-semibold"
                 >
                     Explore Events →
                 </Button>
